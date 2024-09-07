@@ -10,49 +10,49 @@ private:
     static int swap_count;
 
 public:
-    // ¹¹Ôìº¯Êı
+    // æ„é€ å‡½æ•°
     Int(T value) : val(value) {}
 
-    // Ö»¶Á³ÉÔ±º¯Êı
+    // åªè¯»æˆå‘˜å‡½æ•°
     T value() const
     {
         return val;
     }
 
-    // »ñÈ¡Í³¼ÆÊı¾İ
+    // è·å–ç»Ÿè®¡æ•°æ®
     static int get_compare_count()
     {
-        return compare_count;
+        return compare_count / 2;
     }
     static int get_swap_count()
     {
         return swap_count;
     }
 
-    // ÓÑÔªº¯ÊıÉùÃ÷
+    // å‹å…ƒå‡½æ•°å£°æ˜
     template<typename U>
-    friend bool operator<(const Int<U>& a, const Int<U>& b);
+    friend auto operator<=>(const Int<U>& a, const Int<U>& b);
 
     template<typename U>
     friend void swap(Int<U>& a, Int<U>& b);
 };
 
-// ¾²Ì¬³ÉÔ±±äÁ¿³õÊ¼»¯
+// é™æ€æˆå‘˜å˜é‡åˆå§‹åŒ–
 template <typename T>
 int Int<T>::compare_count = 0;
 
 template <typename T>
 int Int<T>::swap_count = 0;
 
-// ÓÑÔªº¯ÊıÊµÏÖĞ¡ÓÚÔËËã·û
+// å‹å…ƒå‡½æ•°å®ç°ä¸‰è·¯æ¯”è¾ƒè¿ç®—ç¬¦
 template <typename T>
-bool operator<(const Int<T>& a, const Int<T>& b)
+auto operator<=>(const Int<T>& a, const Int<T>& b)
 {
     ++Int<T>::compare_count;
-    return a.val < b.val;
+    return a.val <=> b.val;
 }
 
-// ÓÑÔªº¯ÊıÊµÏÖ½»»»²Ù×÷
+// å‹å…ƒå‡½æ•°å®ç°äº¤æ¢æ“ä½œ
 template <typename T>
 void swap(Int<T>& a, Int<T>& b)
 {
@@ -62,40 +62,44 @@ void swap(Int<T>& a, Int<T>& b)
     b.val = temp;
 }
 
-// ±È½ÏÁ½¸öInt¶ÔÏóµÄº¯Êı
+// æ¯”è¾ƒä¸¤ä¸ªIntå¯¹è±¡çš„å‡½æ•°
 template <typename T>
 void compare(const Int<T>& a, const Int<T>& b)
 {
-    if (a < b)
+    if ((a <=> b) < 0)
     {
-        cout << a.value() << " Ğ¡ÓÚ " << b.value() << endl;
+        cout << a.value() << " å°äº " << b.value() << endl;
+    }
+    else if ((a <=> b) == 0)
+    {
+        cout << a.value() << " ç­‰äº " << b.value() << endl;
     }
     else
     {
-        cout << a.value() << " ²»Ğ¡ÓÚ " << b.value() << endl;
+        cout << a.value() << " å¤§äº " << b.value() << endl;
     }
 }
 
 int main() {
-    Int<int> a(5);   // Ê¹ÓÃ int ÀàĞÍ
-    Int<int> b(10);
+    Int<int> a(5);   // ä½¿ç”¨ int ç±»å‹
+    Int<int> b(5);
 
-    cout << "½»»»Ç°: a = " << a.value() << ", b = " << b.value() << endl;
+    cout << "äº¤æ¢å‰: a = " << a.value() << ", b = " << b.value() << endl;
     compare(a, b);
     swap(a, b);
-    cout << "½»»»ºó: a = " << a.value() << ", b = " << b.value() << endl;
-    cout << "±È½Ï´ÎÊı(int): " << Int<int>::get_compare_count() << endl;
-    cout << "½»»»´ÎÊı(int): " << Int<int>::get_swap_count() << endl;
+    cout << "äº¤æ¢å: a = " << a.value() << ", b = " << b.value() << endl;
+    cout << "æ¯”è¾ƒæ¬¡æ•°(int): " << Int<int>::get_compare_count() << endl;
+    cout << "äº¤æ¢æ¬¡æ•°(int): " << Int<int>::get_swap_count() << endl;
 
-    Int<long> c(100);  // Ê¹ÓÃ long ÀàĞÍ
+    Int<long> c(100);  // ä½¿ç”¨ long ç±»å‹
     Int<long> d(50);
 
-    cout << "½»»»Ç°: c = " << c.value() << ", d = " << d.value() << endl;
+    cout << "äº¤æ¢å‰: c = " << c.value() << ", d = " << d.value() << endl;
     compare(c, d);
     swap(c, d);
-    cout << "½»»»ºó: c = " << c.value() << ", d = " << d.value() << endl;
-    cout << "±È½Ï´ÎÊı (long): " << Int<long>::get_compare_count() << endl;
-    cout << "½»»»´ÎÊı (long): " << Int<long>::get_swap_count() << endl;
+    cout << "äº¤æ¢å: c = " << c.value() << ", d = " << d.value() << endl;
+    cout << "æ¯”è¾ƒæ¬¡æ•° (long): " << Int<long>::get_compare_count() << endl;
+    cout << "äº¤æ¢æ¬¡æ•° (long): " << Int<long>::get_swap_count() << endl;
 
     return 0;
 }
